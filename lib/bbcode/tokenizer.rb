@@ -5,6 +5,9 @@ module Bbcode
 		ATTRIBUTE_PATTERN = /(?:\s*(?:([a-z0-9_-]+)|^)\s*[:=]\s*)?("[^"\\]*(?:\\[\s\S][^"\\]*)*"|'[^'\\]*(?:\\[\s\S][^'\\]*)*'|[^\]\s,]+|(?<=,)(?=\s*,))\s*,?/i
 		UNESCAPE_PATTERN = /\\(.)/
 
+		# TODO: Rewrite this mess of a gem
+		# TODO: Until then, at least fix attribute parsing:
+		#  [html a=" c="d"]content[/html] # => {"a"=>" c=", 0=>"d\""}
 		def parse_attributes_string( attributes_string )
 			attrs = HashWithIndifferentAccess.new
 			return attrs if attributes_string.nil?
