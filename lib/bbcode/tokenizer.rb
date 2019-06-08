@@ -1,7 +1,7 @@
 module Bbcode
 	# Scans a string and converts it to a stream of bbcode tokens.
 	class Tokenizer
-		BBCODE_TAG_PATTERN = /\[(\/?)([a-z0-9_-]*)(\s*=?(?:(?:\s*(?:(?:[a-z0-9_-]+)|(?<=\=))\s*[:=]\s*)?(?:"[^"\\]*(?:\\[\s\S][^"\\]*)*"|'[^'\\]*(?:\\[\s\S][^'\\]*)*'|[^\]\s,]+|(?<=,)(?=\s*,))\s*,?\s*)*)\]/i
+		# BBCODE_TAG_PATTERN = /\[(\/?)([a-z0-9_-]*)(\s*=?(?:(?:\s*(?:(?:[a-z0-9_-]+)|(?<=\=))\s*[:=]\s*)?(?:"[^"\\]*(?:\\[\s\S][^"\\]*)*"|'[^'\\]*(?:\\[\s\S][^'\\]*)*'|[^\]\s,]+|(?<=,)(?=\s*,))\s*,?\s*)*)\]/i
 		ATTRIBUTE_PATTERN = /(?:\s*(?:([a-z0-9_-]+)|^)\s*[:=]\s*)?("[^"\\]*(?:\\[\s\S][^"\\]*)*"|'[^'\\]*(?:\\[\s\S][^'\\]*)*'|[^\]\s,]+|(?<=,)(?=\s*,))\s*,?/i
 		UNESCAPE_PATTERN = /\\(.)/
 
@@ -45,7 +45,9 @@ module Bbcode
 		# In some cases, the text might be separated to multiple :text events, even
 		# though there are no nodes in between.
 		def tokenize(document, handler)
-			while !(match = BBCODE_TAG_PATTERN.match(document)).nil?
+			pattern = /\[(\/?)(#{handler.element_handler_names.join('|')})([^\[\]]*)\]/i
+
+			while (match = pattern.match(document))
 				offset = match.begin(0)
 				elem_source = match[0]
 

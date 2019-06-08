@@ -23,6 +23,10 @@ module Bbcode
 			@element_handlers[name] = handler
 		end
 
+		def element_handler_names
+			@element_handlers.keys
+		end
+
 		def start_element( tagname, attributes, source )
 			handler_element = HandlerElement.new self, tagname, attributes, source
 			current_handler_element.childs << handler_element
