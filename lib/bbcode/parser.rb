@@ -40,6 +40,8 @@ module Bbcode
 			end
 		end
 
+		delegate :element_handler_names, to: :@handler
+
 		def parse( document, handler )
 			@handler = handler
 			@tokenizer.tokenize document, self

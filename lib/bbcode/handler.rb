@@ -23,6 +23,10 @@ module Bbcode
 			@element_handlers[name] = handler
 		end
 
+		def element_handler_names
+			@element_handlers.keys
+		end
+
 		def start_element( tagname, attributes, source )
 			handler_element = HandlerElement.new self, tagname, attributes, source
 			current_handler_element.childs << handler_element
@@ -71,6 +75,10 @@ module Bbcode
 		def apply_element_handler_for_element(element)
 			callable = get_element_handler(element.is_a?(String) ? :"#text" : element.tagname)
 			callable.arity == 2 ? callable.call(element, locals) : callable.call(element)
+		end
+
+		def result
+			get_document.content.to_s
 		end
 
 		protected

@@ -2,18 +2,16 @@ require 'active_support/all'
 require 'action_view/helpers/capture_helper'
 require 'action_view/helpers/tag_helper'
 require 'cgi'
-require "bbcode/version"
-require "bbcode/tokenizer"
-require "bbcode/abstract_handler"
-require "bbcode/parser"
-require "bbcode/handler"
-require "bbcode/html_handler"
-require "bbcode/base"
-require "bbcode/helpers"
+require 'bbcode/version'
+require 'bbcode/tokenizer'
+require 'bbcode/abstract_handler'
+require 'bbcode/parser'
+require 'bbcode/handler'
+require 'bbcode/html_handler'
+require 'bbcode/base'
+require 'bbcode/helpers'
 
 module Bbcode
-	String.send :include, Bbcode::Helpers
-
 	def self.handlers
 		@@handlers ||= {}
 	end
@@ -39,5 +37,22 @@ module Bbcode
 		parsers[name] = (parser || parser_factory)
 	end
 
-	register_parser(:bbcode){ Parser.new(Tokenizer.new) }
+  #
+  # Parses the given string using the parser with the given name
+  #
+  # @example parse a string using the :bbcode parser
+  #     Bbcode.string_as('[b]bold![/b] text', :bbcode)
+  #
+  def self.string_as(string, parser_name)
+    Base.new(parser(parser_name), string)
+  end
+
+  #
+  # Parses the given string as BBCode
+  #
+  def self.string_as_bbcode(string)
+    string_as(string, :bbcode)
+  end
+
+	register_parser(:bbcode) { Parser.new(Tokenizer.new) }
 end
